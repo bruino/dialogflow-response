@@ -1,0 +1,2 @@
+agregar for_plataform en ImageResponse
+agregar DIALOGFLOW_CONSOLE entre las opciones de respuesta(me parece q debe agregar todas las respuestas en ese caso)
