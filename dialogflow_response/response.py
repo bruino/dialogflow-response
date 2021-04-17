@@ -7,7 +7,6 @@ class FulfillmentResponse:
         self.fulfillment_text = fulfillment_text
         self._fulfillment_messages = None
         self._output_contexts = None
-        self._followup_event_input = None
 
     def set_fulfillment_messages(self, messages: "List of Response Message"):
         self._fulfillment_messages = messages
@@ -21,7 +20,7 @@ class FulfillmentResponse:
         }
 
     def set_output_contexts(
-        self, project_id: str, session: str, contexts: "List of context"
+            self, project_id: str, session: str, contexts: "List of context"
     ):
         _output_contexts = []
         for context in contexts:
@@ -36,9 +35,6 @@ class FulfillmentResponse:
             )
         self._output_contexts = _output_contexts
 
-    def set_followup_event_input(self, name: str, parameters: dict):
-        self._followup_event_input = {"name": name, "parameters": parameters}
-
     def as_dict(self) -> dict:
         fulfillment_response = dict()
         fulfillment_response["fulfillmentText"] = self.fulfillment_text
@@ -48,9 +44,6 @@ class FulfillmentResponse:
 
         if self._output_contexts:
             fulfillment_response["outputContexts"] = self._output_contexts
-
-        if self._followup_event_input:
-            fulfillment_response["followupEventInput"] = self._followup_event_input
 
         return fulfillment_response
 
@@ -62,16 +55,16 @@ class SimpleResponse:
     def __init__(self, text: str, speak: str = None):
         self.text = text
         self.speak = speak
-        self._plataforms = {
+        self._platforms = {
             "TELEGRAM": "for_telegram",
             "FACEBOOK": "for_facebook",
             "ACTIONS_ON_GOOGLE": "for_aog",
         }
 
-    def for_plataform(self, plataform: str):
-        if not plataform in self._plataforms:
-            raise Exception("Not plataform exist.")
-        return getattr(self, self._plataforms[plataform])()
+    def for_platform(self, platform: str):
+        if platform not in self._platforms:
+            raise Exception("Not platform exist.")
+        return getattr(self, self._platforms[platform])()
 
     # TODO: support for multiple simple response.
     def for_aog(self) -> dict:
@@ -113,17 +106,18 @@ class ChoicesResponse:
 
         self.title = title
         self.choices = choices
-        self._plataforms = {
+        self._platforms = {
             "TELEGRAM": "for_telegram",
             "FACEBOOK": "for_facebook",
             "ACTIONS_ON_GOOGLE": "for_aog",
         }
 
-    def for_plataform(self, plataform: str):
-        if not plataform in self._plataforms:
-            raise Exception("Not plataform exist.")
-        return getattr(self, self._plataforms[plataform])()
+    def for_platform(self, platform: str):
+        if platform not in self._platforms:
+            raise Exception("Not platform exist.")
+        return getattr(self, self._platforms[platform])()
 
+    # TODO: argument no title in aog
     def for_aog(self) -> dict:
         return {
             "platform": "ACTIONS_ON_GOOGLE",
@@ -159,15 +153,15 @@ class ChoicesResponse:
 
 
 class CardResponse:
-    # TODO: ver enlace adjunto para no meter la pata
+    # TODO: see link
     # https://developers.google.com/assistant/conversational/df-asdk/rich-responses
     def __init__(
-        self,
-        title: str = None,
-        subtitle: str = None,
-        formatted_text: str = None,
-        image: str = None,
-        buttons: "List of [title_button, url_link]" = None,
+            self,
+            title: str = None,
+            subtitle: str = None,
+            formatted_text: str = None,
+            image: str = None,
+            buttons: "List of [title_button, url_link]" = None,
     ):
         if not formatted_text and not image:
             raise Exception("Formatted text or image required.")
@@ -180,20 +174,20 @@ class CardResponse:
         self.formatted_text = formatted_text
         self.image = image
         self.buttons = buttons
-        self._plataforms = {
+        self._platforms = {
             "TELEGRAM": "for_telegram",
             "FACEBOOK": "for_facebook",
             "ACTIONS_ON_GOOGLE": "for_aog",
         }
 
-    def for_plataform(self, plataform: str):
-        if not plataform in self._plataforms:
-            raise Exception("Not plataform exist.")
-        return getattr(self, self._plataforms[plataform])()
+    def for_platform(self, platform: str):
+        if platform not in self._platforms:
+            raise Exception("Not platform exist.")
+        return getattr(self, self._platforms[platform])()
 
     def for_aog(self) -> dict:
         image = None
-        if self.image:  # "accessibilityText": image[1] TODO: pendiente de analizar
+        if self.image:  # "accessibilityText": image[1] TODO: optional?
             image = {"imageUri": self.image}
 
         buttons = None
@@ -220,7 +214,6 @@ class CardResponse:
             "basicCard": basic_card,
         }
 
-    # TODO:?? corregir para que acepte todos los parámetros anteriores, seguramente recurra al payload
     def for_facebook(self) -> dict:
         buttons = None
         if self.buttons:
@@ -303,15 +296,15 @@ class ImageResponse:
 class RequestLocationResponse:
     def __init__(self, text_message: str):
         self.text_message = text_message
-        self._plataforms = {
+        self._platforms = {
             "TELEGRAM": "for_telegram",
             "ACTIONS_ON_GOOGLE": "for_aog",
         }
 
-    def for_plataform(self, plataform: str):
-        if not plataform in self._plataforms:
-            raise Exception("Not plataform exist.")
-        return getattr(self, self._plataforms[plataform])()
+    def for_platform(self, platform: str):
+        if platform not in self._platforms:
+            raise Exception("Not platform exist.")
+        return getattr(self, self._platforms[platform])()
 
     def for_aog(self) -> dict:
         return {
@@ -345,8 +338,3 @@ class RequestLocationResponse:
                 }
             },
         }
-
-
-# TODO: Rich Response for Actions on Google.
-# https://developers.google.com/assistant/conversational/df-asdk/rich-responses
-# https://github.com/dialogflow/fulfillment-webhook-json/tree/master/responses/v2/ActionsOnGoogle/RichResponses
