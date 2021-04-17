@@ -17,11 +17,11 @@ class TestFulfillmentResponse(unittest.TestCase):
         )
 
     def test_fulfillment_response_with_fulfillment_messages(self):
-        plataform = "ACTIONS_ON_GOOGLE"
+        platform = "ACTIONS_ON_GOOGLE"
         response = FulfillmentResponse("Hello")
         response.set_fulfillment_messages(
             [
-                SimpleResponse("Hello").for_plataform(plataform),
+                SimpleResponse("Hello").for_platform(platform),
                 CardResponse(
                     "title",
                     "subtitle",
@@ -31,7 +31,7 @@ class TestFulfillmentResponse(unittest.TestCase):
                         ["button 1", "link button 1"],
                         ["button 2", "link button 2"],
                     ],
-                ).for_plataform(plataform),
+                ).for_platform(platform),
             ]
         )
         self.assertEqual(
@@ -124,29 +124,12 @@ class TestFulfillmentResponse(unittest.TestCase):
             "Not response correct.",
         )
 
-    def test_fulfillment_response_with_followup_event_input(self):
-        response = FulfillmentResponse("Hello")
-        response.set_followup_event_input("event_foo", {"param": "param value"})
-        self.assertEqual(
-            response.as_dict(),
-            {
-                "fulfillmentText": "Hello",
-                "followupEventInput": {
-                    "name": "event_foo",
-                    "parameters": {
-                        "param": "param value",
-                    },
-                },
-            },
-            "Not response correct.",
-        )
-
     def test_fulfillment_response_full(self):
-        plataform = "TELEGRAM"
+        platform = "TELEGRAM"
         response = FulfillmentResponse("Hello")
         response.set_fulfillment_messages(
             [
-                SimpleResponse("Hello").for_plataform(plataform),
+                SimpleResponse("Hello").for_platform(platform),
                 CardResponse(
                     "title",
                     "subtitle",
@@ -156,7 +139,7 @@ class TestFulfillmentResponse(unittest.TestCase):
                         ["button 1", "link button 1"],
                         ["button 2", "link button 2"],
                     ],
-                ).for_plataform(plataform),
+                ).for_platform(platform),
             ]
         )
         response.set_output_contexts(
@@ -170,7 +153,6 @@ class TestFulfillmentResponse(unittest.TestCase):
                 ),
             ],
         )
-        response.set_followup_event_input("event_foo", {"param": "param value"})
         self.assertEqual(
             response.as_dict(),
             {
@@ -206,12 +188,6 @@ class TestFulfillmentResponse(unittest.TestCase):
                         "parameters": {"param": "param value"},
                     },
                 ],
-                "followupEventInput": {
-                    "name": "event_foo",
-                    "parameters": {
-                        "param": "param value",
-                    },
-                },
             },
             "Not response correct.",
         )
