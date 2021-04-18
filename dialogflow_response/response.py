@@ -141,7 +141,6 @@ class ChoicesResponse:
             },
         }
 
-    # TODO: opciones de inline(aparece junto al msj) o keyboard(reemplaza al teclado)
     def for_telegram(self) -> dict:  # Keyboard for default.
         return {
             "platform": "TELEGRAM",

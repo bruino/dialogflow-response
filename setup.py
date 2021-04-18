@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dialogflow-response",
-    version="0.1.0",
+    version="0.1.1",
     author="bruino",
     author_email="bruno.sarverry@outlook.com",
-    description="Create webhook JSON responses for Dialogflow(Fulfillment)",
+    description=" Create webhook responses for Dialogflow with this small library in python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bruino/dialogflow-response",
